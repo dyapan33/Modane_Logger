@@ -1,3 +1,4 @@
+// This file is part of the Modane_Logger Project and is licensed under BSD3, to find out more head to https://github.com/dyapan33/Modane_Logger/
 #pragma once
 #include <iostream>
 #include <fstream>
