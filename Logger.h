@@ -1,4 +1,4 @@
-// This file is part of the Modane_Logger Project and is licensed under BSD3, to find out more head to https://github.com/dyapan33/Modane_Logger/
+// This file is part of the Modane Logger Project and can be found at github.com/dyapan33/Modane_Logger/
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -27,12 +27,23 @@ namespace Logging {
         void Save(const char* File);
         void ClearLogFile(const char* File);
 
-        void Info(const char* Message, ...);
-        void Debug(const char* Message, ...);
-        void Trace(const char* Message, ...);
-        void Warning(const char* Message, ...);
-        void Critical(const char* Message, ...);
-        void Error(const char* Message, ...);
+        template<typename... Args>
+        void Info(const char* Message, const Args&... args);
+
+        template<typename... Args>
+        void Debug(const char* Message, const Args&... args);
+
+        template<typename... Args>
+        void Trace(const char* Message, const Args&... args);
+
+        template<typename... Args>
+        void Warning(const char* Message, const Args&... args);
+
+        template<typename... Args>
+        void Critical(const char* Message, const Args&... args);
+
+        template<typename... Args>
+        void Error(const char* Message, const Args&... args);
 
     private:
         // --- Private Member Variables ---
@@ -45,7 +56,8 @@ namespace Logging {
         std::ofstream m_LogFileStream;
 
         // --- Private Utility Function ---
-        void PrintAndSave(Level Level, const char* Message, ...);
+        template<typename... Args>
+        void PrintAndSave(Level Level, const char* Message, const Args&... args);
     };
 }
 
