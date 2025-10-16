@@ -7,7 +7,7 @@ A Logging library that is a lightweight logger with basic features and easy to u
 More features are coming soon!
 
 ## Building
-You do not have to build this library, just git clone this repository and put the code into your project!
+Please use the makefile on linux, or mac if you manage to port it. This library doesn't support Windows yet.
 
 ## Documentation
 <b>The documentation is now on the GitHub wiki!</b>
