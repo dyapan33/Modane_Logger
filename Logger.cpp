@@ -1,4 +1,4 @@
-// This file is part of the Modane_Logger Project and is licensed under BSD3, to find out more head to https://github.com/dyapan33/Modane_Logger/
+// This file is part of the Modane Logger Project and can be found at github.com/dyapan33/Modane_Logger/
 #include "Logger.h"
 #include <iostream>
 #include <ctime>
@@ -53,7 +53,8 @@ namespace Logging {
     }
 
     // --- Core Logging Logic ---
-    void Logger::PrintAndSave(Level Level, const char* Message, ...) {
+    template<typename... Args>
+    void Logger::PrintAndSave(Level Level, const char* Message, const Args&... args) {
         // Check if the logger has been initialized
         if (!m_IsInitialized) {
             std::cout << "Please initialize the logger first!" << std::endl;
@@ -79,7 +80,7 @@ namespace Logging {
             default:                LevelString = "[LOG]"; break; // White
         }
         
-        LogMessageStream << " " << LevelString << ": " << Message;
+        LogMessageStream << " " << LevelString << ": " << Message << args << "\x1b[0m";
         std::string LogMessage = LogMessageStream.str();
 
         // Console Output
@@ -93,37 +94,43 @@ namespace Logging {
     }
 
     // --- Individual Logging Functions ---
-    void Logger::Info(const char* Message, ...) {
-        PrintAndSave(Level::Info, Message);
+    template<typename... Args>
+    void Logger::Info(const char* Message, const Args&... args) {
+        PrintAndSave(Level::Info, Message, args);
         std::cout << "\033[0m";
     }
 
-    void Logger::Debug(const char* Message, ...) {
+    template<typename... Args>
+    void Logger::Debug(const char* Message, const Args&... args) {
         if (m_IsDebugEnabled) {
-            PrintAndSave(Level::Debug, Message);
+            PrintAndSave(Level::Debug, Message, args);
             std::cout << "\033[0m";
         }
     }
 
-    void Logger::Trace(const char* Message, ...) {
+    template<typename... Args>
+    void Logger::Trace(const char* Message, const Args&... args) {
         if (m_IsTraceEnabled) {
-            PrintAndSave(Level::Trace, Message);
+            PrintAndSave(Level::Trace, Message, args);
             std::cout << "\033[0m";
         }
     }
 
-    void Logger::Warning(const char* Message, ...) {
-        PrintAndSave(Level::Warning, Message);
+    template<typename... Args>
+    void Logger::Warning(const char* Message, const Args&... args) {
+        PrintAndSave(Level::Warning, Message, args);
         std::cout << "\033[0m";
     }
 
-    void Logger::Critical(const char* Message, ...) {
-        PrintAndSave(Level::Critical, Message);
+    template<typename... Args>
+    void Logger::Critical(const char* Message, const Args&... args) {
+        PrintAndSave(Level::Critical, Message, args);
         std::cout << "\033[0m";
     }
 
-    void Logger::Error(const char* Message, ...) {
-        PrintAndSave(Level::Error, Message);
+    template<typename... Args>
+    void Logger::Error(const char* Message, const Args&... args) {
+        PrintAndSave(Level::Error, Message, args);
         std::cout << "\033[0m";
     }
 }
