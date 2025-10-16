@@ -98,45 +98,6 @@ namespace Logging {
             m_LogFileStream.flush(); // Force write to disk
         }
     }
-
-    // --- Individual Logging Functions ---
-    template<typename... Args>
-    void Logger::Info(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Info, Message, args...);
-        std::cout << "\033[0m";
-    }
-
-    template<typename... Args>
-    void Logger::Debug(const char* Message, const Args&... args) {
-        if (m_IsDebugEnabled) {
-            PrintAndSave(Level::Debug, Message, args...);
-            std::cout << "\033[0m";
-        }
-    }
-
-    template<typename... Args>
-    void Logger::Trace(const char* Message, const Args&... args) {
-        if (m_IsTraceEnabled) {
-            PrintAndSave(Level::Trace, Message, args...);
-            std::cout << "\033[0m";
-        }
-    }
-
-    template<typename... Args>
-    void Logger::Warning(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Warning, Message, args...);
-        std::cout << "\033[0m";
-    }
-
-    template<typename... Args>
-    void Logger::Critical(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Critical, Message, args...);
-        std::cout << "\033[0m";
-    }
-
-    template<typename... Args>
-    void Logger::Error(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Error, Message, args...);
-        std::cout << "\033[0m";
-    }
 }
+
+
