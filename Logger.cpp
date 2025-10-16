@@ -79,8 +79,14 @@ namespace Logging {
             case Level::Critical:   LevelString = "\033[1;31m[CRITICAL]"; break; // Bold Red
             default:                LevelString = "[LOG]"; break; // White
         }
-        
-        LogMessageStream << " " << LevelString << ": " << Message << args << "\x1b[0m";
+
+        LogMessageStream << LevelString << ": " << Message;
+
+        // Use a fold expression to unpack and stream each argument
+        ((LogMessageStream << " " << args), ...);
+
+        LogMessageStream << "\x1b[0m";
+
         std::string LogMessage = LogMessageStream.str();
 
         // Console Output
@@ -96,14 +102,14 @@ namespace Logging {
     // --- Individual Logging Functions ---
     template<typename... Args>
     void Logger::Info(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Info, Message, args);
+        PrintAndSave(Level::Info, Message, args...);
         std::cout << "\033[0m";
     }
 
     template<typename... Args>
     void Logger::Debug(const char* Message, const Args&... args) {
         if (m_IsDebugEnabled) {
-            PrintAndSave(Level::Debug, Message, args);
+            PrintAndSave(Level::Debug, Message, args...);
             std::cout << "\033[0m";
         }
     }
@@ -111,26 +117,26 @@ namespace Logging {
     template<typename... Args>
     void Logger::Trace(const char* Message, const Args&... args) {
         if (m_IsTraceEnabled) {
-            PrintAndSave(Level::Trace, Message, args);
+            PrintAndSave(Level::Trace, Message, args...);
             std::cout << "\033[0m";
         }
     }
 
     template<typename... Args>
     void Logger::Warning(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Warning, Message, args);
+        PrintAndSave(Level::Warning, Message, args...);
         std::cout << "\033[0m";
     }
 
     template<typename... Args>
     void Logger::Critical(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Critical, Message, args);
+        PrintAndSave(Level::Critical, Message, args...);
         std::cout << "\033[0m";
     }
 
     template<typename... Args>
     void Logger::Error(const char* Message, const Args&... args) {
-        PrintAndSave(Level::Error, Message, args);
+        PrintAndSave(Level::Error, Message, args...);
         std::cout << "\033[0m";
     }
 }
