@@ -10,13 +10,4 @@ More features are coming soon!
 You do not have to build this library, just git clone this repository and put the code into your project!
 
 ## Documentation
-To Initialise the logger, copy and paste the following lines of code into your main.cpp file:
-Logging::Logger MyLogger; // Required
-MyLogger.Init(true, true, true); 
-// For your information on the Init function, the first 'true' is for whether you want Debug logging level to be supported, the second 'true' is for whether you want Trace logging level to be supported, 
-// and the final 'true' is for whether you want to have saving the log enabled.
-MyLogger.ClearLogFile("Log.txt"); // Only include this into your code if you have saving enabled
-MyLogger.Save("Log.txt"); // Only include this into your code if you have saving enabled
-MyLogger.Info("Program started...");
-
-
+<b>The documentation is now on the GitHub wiki!</b>
