@@ -28,22 +28,38 @@ namespace Logging {
         void ClearLogFile(const char* File);
 
         template<typename... Args>
-        void Info(const char* Message, const Args&... args);
+        void Info(const char* Message, const Args&... args) {
+            PrintAndSave(Level::Info, Message, args...);
+        }
 
         template<typename... Args>
-        void Debug(const char* Message, const Args&... args);
+        void Debug(const char* Message, const Args&... args) {
+            if (m_IsDebugEnabled) {
+                PrintAndSave(Level::Debug, Message, args...);
+            }
+        }
 
         template<typename... Args>
-        void Trace(const char* Message, const Args&... args);
+        void Trace(const char* Message, const Args&... args) {
+            if (m_IsTraceEnabled) {
+                PrintAndSave(Level::Trace, Message, args...);
+            }
+        }
 
         template<typename... Args>
-        void Warning(const char* Message, const Args&... args);
+        void Warning(const char* Message, const Args&... args) {
+            PrintAndSave(Level::Warning, Message, args...);
+        }
 
         template<typename... Args>
-        void Critical(const char* Message, const Args&... args);
+        void Critical(const char* Message, const Args&... args) {
+            PrintAndSave(Level::Critical, Message, args...);
+        }
 
         template<typename... Args>
-        void Error(const char* Message, const Args&... args);
+        void Error(const char* Message, const Args&... args) {
+            PrintAndSave(Level::Error, Message, args...);
+        }
 
     private:
         // --- Private Member Variables ---
