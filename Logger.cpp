@@ -51,6 +51,36 @@ namespace Logging {
         MyFile.open(File, std::ofstream::out | std::ofstream::trunc);
         MyFile.close();
     }
+
+    void Logger::AddPigment(Level L) {
+        /*
+        Info,
+        Debug,
+        Trace,
+        Warning,
+        Critical,
+        Error
+        */
+
+        if (L == Level::Info) {
+            std::cout << "\033[34m ";
+        }
+        if (L == Level::Debug) {
+            std::cout << "\033[36m ";
+        }
+        if (L == Level::Trace) {
+            std::cout << "\033[90m ";
+        }
+        if (L == Level::Warning) {
+            std::cout << "\033[32m ";
+        }
+        if (L == Level::Error) {
+            std::cout << "\033[31m ";
+        }
+        if (L == Level::Critical) {
+            std::cout << "\033[1;31m ";
+        }
+    }
 }
 
 
