@@ -16,8 +16,8 @@ namespace Logging {
         Debug,
         Trace,
         Warning,
-        Critical,
-        Error
+        Error,
+        Critical
     };
 
     class Logger {
@@ -56,15 +56,15 @@ namespace Logging {
         void Warning(const char* Message, const Args&... args) {
             PrintAndSave(Level::Warning, Message, args...);
         }
+        
+        template<typename... Args>
+        void Error(const char* Message, const Args&... args) {
+            PrintAndSave(Level::Error, Message, args...);
+        }
 
         template<typename... Args>
         void Critical(const char* Message, const Args&... args) {
             PrintAndSave(Level::Critical, Message, args...);
-        }
-
-        template<typename... Args>
-        void Error(const char* Message, const Args&... args) {
-            PrintAndSave(Level::Error, Message, args...);
         }
 
     private:
@@ -76,6 +76,8 @@ namespace Logging {
 
         std::string m_Directory;
         std::ofstream m_LogFileStream;
+
+        void AddPigment(Level L);
 
         // --- Private Utility Function ---
         template<typename... Args>
@@ -96,26 +98,26 @@ namespace Logging {
 
             const char* LevelString;
             switch (Level) {
-                case Level::Info:       LevelString = "\033[34m[INFO]"; break; // Blue
-                case Level::Debug:      LevelString = "\033[36m[DEBUG]"; break; // Cyan
-                case Level::Trace:      LevelString = "\033[90m[TRACE]"; break; // Bright Grey
-                case Level::Warning:    LevelString = "\033[32m[WARNING]"; break; // Yellow
-                case Level::Error:      LevelString = "\033[31m[ERROR]"; break; // Red
-                case Level::Critical:   LevelString = "\033[1;31m[CRITICAL]"; break; // Bold Red
+                case Level::Info:       LevelString = "[INFO]"; break; // Blue
+                case Level::Debug:      LevelString = "[DEBUG]"; break; // Cyan
+                case Level::Trace:      LevelString = "[TRACE]"; break; // Bright Grey
+                case Level::Warning:    LevelString = "[WARNING]"; break; // Yellow
+                case Level::Error:      LevelString = "[ERROR]"; break; // Red
+                case Level::Critical:   LevelString = "[CRITICAL]"; break; // Bold Red
                 default:                LevelString = "[LOG]"; break; // White
             }
 
-            LogMessageStream << LevelString << ": " << Message;
+            AddPigment(Level); // Adds the pigment to the console
+
+            LogMessageStream << " " << LevelString << ": " << Message; // Adds the LevelString (e.g. Info and then a colon (format: [TIME] [LEVELSTRING]:))
 
             // Use a fold expression to unpack and stream each argument
-            ((LogMessageStream << " " << args), ...);
+            ((LogMessageStream << " " << args), ...); // Print out the arguments
 
-            LogMessageStream << "\x1b[0m";
-
-            std::string LogMessage = LogMessageStream.str();
+            std::string LogMessage = LogMessageStream.str(); // Change above to a string
 
             // Console Output
-            std::cout << LogMessage << std::endl;
+            std::cout << LogMessage << "\x1b[0m" << std::endl; // Prints out message
 
             // File Output
             if (m_IsSaveLogEnabled && m_LogFileStream.is_open()) {
