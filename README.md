@@ -9,7 +9,7 @@ A Logging library that is a lightweight logger with basic features and easy to u
 More features are coming soon!
 
 ## Building
-Please use the makefile on linux, or mac if you manage to port it. This library doesn't support Windows yet.
+Currenty, this logger only supports UNIX systems, primarily Linux, if you manage to port the, "Makefile" to MacOS, you could probably get this stuff up and going, I am working to port it to MacOS and Windows.
 
 ## Documentation
 <b>The documentation is now on the GitHub wiki!</b>
