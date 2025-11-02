@@ -7,8 +7,6 @@
 #include <iomanip>
 #include <chrono>
 
-
-
 namespace Logging {
 
     enum class Level {
@@ -16,15 +14,22 @@ namespace Logging {
         Debug,
         Trace,
         Warning,
-        Error,
-        Critical
+        Critical,
+        Error
     };
 
     class Logger {
     public:
-        // --- Constructor and Destructor ---
-        Logger();
-        ~Logger();
+        static Logger& GetInstance() {
+            static Logger instance; 
+            return instance;
+        }
+
+        // Delete copy/move operations to ensure only one instance exists
+        Logger(const Logger&) = delete;
+        Logger& operator=(const Logger&) = delete;
+        Logger(Logger&&) = delete;
+        Logger& operator=(Logger&&) = delete;
 
         // --- Public Member Functions ---
         void Init(bool DebugEnabled, bool TraceEnabled, bool SaveLog);
@@ -56,18 +61,22 @@ namespace Logging {
         void Warning(const char* Message, const Args&... args) {
             PrintAndSave(Level::Warning, Message, args...);
         }
-        
-        template<typename... Args>
-        void Error(const char* Message, const Args&... args) {
-            PrintAndSave(Level::Error, Message, args...);
-        }
 
         template<typename... Args>
         void Critical(const char* Message, const Args&... args) {
             PrintAndSave(Level::Critical, Message, args...);
         }
 
+        template<typename... Args>
+        void Error(const char* Message, const Args&... args) {
+            PrintAndSave(Level::Error, Message, args...);
+        }
+
     private:
+        // Constructor and Destructor are private to enforce singleton use via GetInstance()
+        Logger();
+        ~Logger();
+
         // --- Private Member Variables ---
         bool m_IsInitialized;
         bool m_IsDebugEnabled;
@@ -76,8 +85,6 @@ namespace Logging {
 
         std::string m_Directory;
         std::ofstream m_LogFileStream;
-
-        void AddPigment(Level L);
 
         // --- Private Utility Function ---
         template<typename... Args>
@@ -98,26 +105,26 @@ namespace Logging {
 
             const char* LevelString;
             switch (Level) {
-                case Level::Info:       LevelString = "[INFO]"; break; // Blue
-                case Level::Debug:      LevelString = "[DEBUG]"; break; // Cyan
-                case Level::Trace:      LevelString = "[TRACE]"; break; // Bright Grey
-                case Level::Warning:    LevelString = "[WARNING]"; break; // Yellow
-                case Level::Error:      LevelString = "[ERROR]"; break; // Red
-                case Level::Critical:   LevelString = "[CRITICAL]"; break; // Bold Red
+                case Level::Info:       LevelString = "\033[34m[INFO]"; break; // Blue
+                case Level::Debug:      LevelString = "\033[36m[DEBUG]"; break; // Cyan
+                case Level::Trace:      LevelString = "\033[90m[TRACE]"; break; // Bright Grey
+                case Level::Warning:    LevelString = "\033[32m[WARNING]"; break; // Yellow
+                case Level::Error:      LevelString = "\033[31m[ERROR]"; break; // Red
+                case Level::Critical:   LevelString = "\033[1;31m[CRITICAL]"; break; // Bold Red
                 default:                LevelString = "[LOG]"; break; // White
             }
 
-            AddPigment(Level); // Adds the pigment to the console
-
-            LogMessageStream << " " << LevelString << ": " << Message; // Adds the LevelString (e.g. Info and then a colon (format: [TIME] [LEVELSTRING]:))
+            LogMessageStream << LevelString << ": " << Message;
 
             // Use a fold expression to unpack and stream each argument
-            ((LogMessageStream << " " << args), ...); // Print out the arguments
+            ((LogMessageStream << " " << args), ...);
 
-            std::string LogMessage = LogMessageStream.str(); // Change above to a string
+            LogMessageStream << "\x1b[0m";
+
+            std::string LogMessage = LogMessageStream.str();
 
             // Console Output
-            std::cout << LogMessage << "\x1b[0m" << std::endl; // Prints out message
+            std::cout << LogMessage << std::endl;
 
             // File Output
             if (m_IsSaveLogEnabled && m_LogFileStream.is_open()) {
@@ -127,5 +134,3 @@ namespace Logging {
         }
     };
 }
-
-
