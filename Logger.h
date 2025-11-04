@@ -86,6 +86,9 @@ namespace Logging {
         std::string m_Directory;
         std::ofstream m_LogFileStream;
 
+        void AddPigment(Level L);
+
+
         // --- Private Utility Function ---
         template<typename... Args>
         void PrintAndSave(Level Level, const char* Message, const Args&... args) {
