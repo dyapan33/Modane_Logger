@@ -20,17 +20,6 @@ namespace Logging {
 
     class Logger {
     public:
-        static Logger& GetInstance() {
-            static Logger instance; 
-            return instance;
-        }
-
-        // Delete copy/move operations to ensure only one instance exists
-        Logger(const Logger&) = delete;
-        Logger& operator=(const Logger&) = delete;
-        Logger(Logger&&) = delete;
-        Logger& operator=(Logger&&) = delete;
-
         // --- Public Member Functions ---
         void Init(bool DebugEnabled, bool TraceEnabled, bool SaveLog);
         void Save(const char* File);
