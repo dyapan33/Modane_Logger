@@ -2,12 +2,14 @@
 CC = g++
 CFLAGS = -Wall -std=c++20
 
+Filename = libmodane
+
 # List C++ source files
 CPP_SRC = Logger.cpp
 
 # Rule to build the final executable
 all:
 	$(CC) $(CFLAGS) -c $(CPP_SRC) # g++ -Wall -std=c++20 -c Logger.cpp
-	ar rcs libmodane.a Logger.o
+	ar rcs $(Filename) Logger.o
 run:
 	sudo ./Build/Main
